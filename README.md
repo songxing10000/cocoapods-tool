@@ -1,7 +1,7 @@
 
-![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/20220222100743.png)
  
-
+ ![](./Snip20220222_5.png)
+// https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/20220222100743.png
 - [x] 刷新仓库列表
 - [x] 双击打开repo url或路径
 - [x] 复制url或路径
