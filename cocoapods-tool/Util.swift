@@ -132,6 +132,11 @@ class Util {
             let data = outputHandler.availableData
             guard data.count > 0 else {
                 if let dataObserver = dataObserver {
+                    if let textView = outputText {
+                        textView.string = "\(textView.string)\n  执行完毕"
+                        let range = NSRange(location:textView.string.count,length:0)
+                        textView.scrollRangeToVisible(range)
+                    }
                     notificationCenter.removeObserver(dataObserver)
                 }
                 return
@@ -180,12 +185,13 @@ class Util {
         process.terminationHandler = { (process) in
             print("\ndidFinish: \(!process.isRunning)")
         }
+    
         let pipe = Pipe()
         process.standardOutput = pipe
+        
         let outputHandler = pipe.fileHandleForReading
         outputHandler.waitForDataInBackgroundAndNotify()
-        
-        var output = ""
+         var output = ""
         var dataObserver: NSObjectProtocol!
         let notificationCenter = NotificationCenter.default
         let dataNotificationName = NSNotification.Name.NSFileHandleDataAvailable
@@ -193,6 +199,12 @@ class Util {
             let data = outputHandler.availableData
             guard data.count > 0 else {
                 if let dataObserver = dataObserver {
+                    if let textView = outputText {
+                        textView.string = "\(textView.string)\n  执行完毕"
+                        let range = NSRange(location:textView.string.count,length:0)
+                        textView.scrollRangeToVisible(range)
+                    }
+                   
                     notificationCenter.removeObserver(dataObserver)
                 }
                 return
