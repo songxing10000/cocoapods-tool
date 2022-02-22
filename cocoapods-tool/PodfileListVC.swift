@@ -208,28 +208,13 @@ extension PodfileListVC: NSMenuDelegate {
               let cellView = row.view(atColumn: m_tableView.clickedColumn) as? NSTableCellView  else {
                   return
               }
-        let cellId = cellView.identifier?.rawValue
-        //        if cellId == CellIdentifiers.url {
-        //            Util.pasteStr(repos[idx].URL)
-        //            return
-        //        }
-        //        if cellId == CellIdentifiers.path {
-        //            Util.pasteStr(repos[idx].path)
-        //            return
-        //        }
-        if cellId == CellIdentifiers.name {
-            //                刷新
-            m_filePaths.remove(at: idx)
-            m_tableView.reloadData()
-            //                偏好同步
-            UserDefaults.standard.set(m_filePaths, forKey: self.saveKey)
-            
-            return
-        }
-        //        if cellId == CellIdentifiers.type {
-        //            Util.pasteStr(repos[idx].type)
-        //            return
-        //        }
+        
+        //                刷新
+        m_filePaths.remove(at: idx)
+        m_tableView.reloadData()
+        //                偏好同步
+        UserDefaults.standard.set(m_filePaths, forKey: self.saveKey)
+        
     }
 }
 
