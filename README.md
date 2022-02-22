@@ -1,9 +1,6 @@
-# cocoapods-tool
 
-### pod repo
-
-![1](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/20220222100743.png)
-
+![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/20220222100743.png)
+ 
 
 - [x] 刷新仓库列表
 - [x] 双击打开repo url或路径
@@ -11,9 +8,8 @@
 - [x] 更新repo
 
 
-### Podfile
-
-![2](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/Snip20220222_4.png)
+ 
+![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/Snip20220222_4.png)
 
 - [x] 点添加或拖拽`Podfile`文件进入列表
 - [x] 双击打开`Podfile`
