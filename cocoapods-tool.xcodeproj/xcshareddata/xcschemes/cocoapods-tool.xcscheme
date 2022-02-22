@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "98240B99279E8EBD00DED8E5"
-               BuildableName = "testPod.app"
+               BuildableName = "cocoapods-tool.app"
                BlueprintName = "cocoapods-tool"
                ReferencedContainer = "container:cocoapods-tool.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "98240B99279E8EBD00DED8E5"
-            BuildableName = "testPod.app"
+            BuildableName = "cocoapods-tool.app"
             BlueprintName = "cocoapods-tool"
             ReferencedContainer = "container:cocoapods-tool.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "98240B99279E8EBD00DED8E5"
-            BuildableName = "testPod.app"
+            BuildableName = "cocoapods-tool.app"
             BlueprintName = "cocoapods-tool"
             ReferencedContainer = "container:cocoapods-tool.xcodeproj">
          </BuildableReference>
