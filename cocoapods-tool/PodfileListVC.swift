@@ -11,6 +11,7 @@ class PodfileListVC: NSViewController {
     private let saveKey = "podfilePaths"
     @IBOutlet weak var m_tableView: NSTableView!
     private var m_filePaths = [String]()
+    @IBOutlet var outputText:NSTextView!
     
     private let nameIdentifier = NSUserInterfaceItemIdentifier("name")
     private let typeIdentifier = NSUserInterfaceItemIdentifier("type")
@@ -29,7 +30,7 @@ class PodfileListVC: NSViewController {
             
         }
         m_tableView.doubleAction = #selector(doubleClickOnResultRow)
-
+        
         cellAddRightMenu()
         // 拖拽一个文件到NSTableView中，获取其路径
         m_tableView.registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
@@ -78,32 +79,7 @@ class PodfileListVC: NSViewController {
     }
     @objc func clickUpdateBtn(_ btn: NSButton) {
         let filePath = m_filePaths[btn.tag]
-        var environment = [String:String]()
-        environment["LANG"] = "en_US.UTF-8"
-        environment["PATH"] = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/dfpo/development/flutter/bin"
-        environment["CP_HOME_DIR"] = NSHomeDirectory().appending("/.cocoapods")
- 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh/")
-        var args : [String]!
-        args = []
-       
-        args.append("-c")
-        args.append("cd \(filePath.replacingOccurrences(of: "/Podfile", with: "")) && \(Util.m_podFilePath) install")
-        process.arguments = args
-        process.environment = environment
-        process.terminationHandler = { (process) in
-          print("\ndidFinish: \(!process.isRunning)")
-        }
-        do {
-           try process.run()
-         } catch {}
-
-        let app = NSApplication.shared
-        app.setActivationPolicy(.regular)
-        app.activate(ignoringOtherApps:true)
-        app.run()
-
+        Util.doPodInstallAtPath(path: filePath, outputText: outputText)
     }
     // MARK: - cell双击事件
     @objc func doubleClickOnResultRow() {
@@ -194,22 +170,22 @@ extension PodfileListVC: NSTableViewDataSource {
     // MARK: Drag Destination Actions
     func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         if let filePath = info.draggingPasteboard.pasteboardItems?.first?.string(forType: .fileURL),
-            let url = URL(string: filePath),
-            url.lastPathComponent == "Podfile" {
+           let url = URL(string: filePath),
+           url.lastPathComponent == "Podfile" {
             return .link
             
         }
         return []
     }
     func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
-
+        
         if let filePath = info.draggingPasteboard.pasteboardItems?.first?.string(forType: .fileURL),
-            let url = URL(string: filePath),
-            url.lastPathComponent == "Podfile" {
+           let url = URL(string: filePath),
+           url.lastPathComponent == "Podfile" {
             self.insertPodfile(filePath: url.path)
             self.m_tableView.reloadData()
             // 双击打开Podfile
-//            NSWorkspace.shared.open(url)
+            //            NSWorkspace.shared.open(url)
             
             return true
         }
@@ -233,14 +209,14 @@ extension PodfileListVC: NSMenuDelegate {
                   return
               }
         let cellId = cellView.identifier?.rawValue
-//        if cellId == CellIdentifiers.url {
-//            Util.pasteStr(repos[idx].URL)
-//            return
-//        }
-//        if cellId == CellIdentifiers.path {
-//            Util.pasteStr(repos[idx].path)
-//            return
-//        }
+        //        if cellId == CellIdentifiers.url {
+        //            Util.pasteStr(repos[idx].URL)
+        //            return
+        //        }
+        //        if cellId == CellIdentifiers.path {
+        //            Util.pasteStr(repos[idx].path)
+        //            return
+        //        }
         if cellId == CellIdentifiers.name {
             //                刷新
             m_filePaths.remove(at: idx)
@@ -250,10 +226,10 @@ extension PodfileListVC: NSMenuDelegate {
             
             return
         }
-//        if cellId == CellIdentifiers.type {
-//            Util.pasteStr(repos[idx].type)
-//            return
-//        }
+        //        if cellId == CellIdentifiers.type {
+        //            Util.pasteStr(repos[idx].type)
+        //            return
+        //        }
     }
 }
 

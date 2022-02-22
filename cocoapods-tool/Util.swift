@@ -155,4 +155,70 @@ class Util {
         return ShellResult(output: output, status: task.terminationStatus)
     }
     
+    /// 在某个文件处执行pod install
+    /// - Parameters:
+    ///   - path: Podfile路径或Podfile直接上层文件夹路径
+    ///   - outputText: 输出显示控件
+    class func doPodInstallAtPath(path: String?, outputText:NSTextView?) {
+        guard let path = path, !path.isEmpty else {
+            return
+        }
+        var environment = [String:String]()
+        environment["LANG"] = "en_US.UTF-8"
+        environment["PATH"] = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/dfpo/development/flutter/bin"
+        environment["CP_HOME_DIR"] = NSHomeDirectory().appending("/.cocoapods")
+        
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/zsh/")
+        var args : [String]!
+        args = []
+        
+        args.append("-c")
+        args.append("cd \(path.replacingOccurrences(of: "/Podfile", with: "")) && \(Util.m_podFilePath) install")
+        process.arguments = args
+        process.environment = environment
+        process.terminationHandler = { (process) in
+            print("\ndidFinish: \(!process.isRunning)")
+        }
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        let outputHandler = pipe.fileHandleForReading
+        outputHandler.waitForDataInBackgroundAndNotify()
+        
+        var output = ""
+        var dataObserver: NSObjectProtocol!
+        let notificationCenter = NotificationCenter.default
+        let dataNotificationName = NSNotification.Name.NSFileHandleDataAvailable
+        dataObserver = notificationCenter.addObserver(forName: dataNotificationName, object: outputHandler, queue: nil) {  notification in
+            let data = outputHandler.availableData
+            guard data.count > 0 else {
+                if let dataObserver = dataObserver {
+                    notificationCenter.removeObserver(dataObserver)
+                }
+                return
+            }
+            if let line = String(data: data, encoding: .utf8) {
+                let previousOutput = outputText?.string ?? ""
+                let nextOutput = previousOutput + "\n" + line
+                outputText?.string = nextOutput
+                output = output + line + "\n"
+                print(line)
+                let range = NSRange(location:nextOutput.count,length:0)
+                outputText?.scrollRangeToVisible(range)
+                
+                
+            }
+            outputHandler.waitForDataInBackgroundAndNotify()
+        }
+        
+        
+        do {
+            try process.run()
+        } catch {}
+        
+        let app = NSApplication.shared
+        app.setActivationPolicy(.regular)
+        app.activate(ignoringOtherApps:true)
+        app.run()
+    }
 }
